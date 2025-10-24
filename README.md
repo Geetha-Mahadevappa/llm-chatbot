@@ -180,5 +180,4 @@ You can try:
 
 ---
 
-Would you like me to generate a **short GitHub “About” description (1–2 lines)** for your repo page — the one that appears at the top under your project title?
-It makes your repo look polished and professional.
+Would you like me to generate a **short GitHub “About” description (1–2 lines)** for your repo page — the one that appears at the top under your project tit
