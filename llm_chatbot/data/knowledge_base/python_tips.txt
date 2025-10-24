@@ -1,0 +1,10 @@
+# Python Tips and Tricks
+
+1. Use list comprehensions for cleaner loops:
+   squares = [x**2 for x in range(10)]
+
+2. Use enumerate() when iterating with an index.
+
+3. Use the `with` statement for file operations to auto-close files.
+
+4. For debugging, use the `pdb` module or VSCode debugger.
