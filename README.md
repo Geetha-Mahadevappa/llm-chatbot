@@ -59,8 +59,8 @@ rag_coding_assistant/
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/rag_coding_assistant.git
-cd rag_coding_assistant
+https://github.com/Geetha-Mahadevappa/llm-chatbot.git
+cd llm-chatbot
 ```
 
 ### 2️⃣ Install Dependencies
