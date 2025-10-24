@@ -18,7 +18,7 @@ def create_vectorstore(data_path="data/knowledge_base"):
     vectorstore = FAISS.from_documents(chunks, embeddings)
 
     vectorstore.save_local("faiss_index")
-    print("✅ Vectorstore created and saved locally.")
+    print("Vectorstore created and saved locally.")
 
 def load_vectorstore():
     embeddings = OpenAIEmbeddings()
