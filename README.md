@@ -71,9 +71,10 @@ pip install -r requirements.txt
 
 ### 3️⃣ Set Up Environment Variables
 
-Create a `.env` file in your project root:
+Create a `.env` file in your project root (you can start by copying `.env.example`):
 
 ```bash
+cp .env.example .env
 OPENAI_API_KEY=sk-your-openai-api-key
 LANGCHAIN_TRACING_V2=true
 LANGCHAIN_API_KEY=your-langsmith-api-key
@@ -131,6 +132,22 @@ You can **add more `.txt` or `.md` files** here to expand your assistant’s kno
 
   ```bash
   streamlit run app/ui_streamlit.py
+  ```
+
+### `app/cli.py`
+
+* Lightweight command-line interface for quick questions
+* Supports adjusting retrieval depth and model temperature
+* Ask a single question:
+
+  ```bash
+  python -m app.cli "How do I reverse a string in Python?"
+  ```
+
+* Start an interactive prompt:
+
+  ```bash
+  python -m app.cli
   ```
 
 ---
