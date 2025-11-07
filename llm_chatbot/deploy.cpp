@@ -12,6 +12,7 @@ struct Options {
     fs::path venv_path{".venv"};
     std::string python_exe{"python3"};
     bool skip_install{false};
+    bool launch_streamlit{false};
 };
 
 std::string quote(const std::string& arg) {
@@ -39,6 +40,7 @@ void print_usage(const char* argv0) {
               << "  --venv-path <path>   Path where the virtual environment will be created (default: .venv)\n"
               << "  --python <executable>  Python executable to use for managing the virtual environment (default: python3)\n"
               << "  --skip-install       Skip dependency installation, just validate the environment\n"
+              << "  --launch             Launch Streamlit after preparing the environment\n"
               << "  -h, --help           Show this message and exit\n";
 }
 
@@ -55,6 +57,8 @@ Options parse_arguments(int argc, char** argv) {
             opts.python_exe = argv[++i];
         } else if (arg == "--skip-install") {
             opts.skip_install = true;
+        } else if (arg == "--launch") {
+            opts.launch_streamlit = true;
         } else if (arg == "-h" || arg == "--help") {
             print_usage(argv[0]);
             std::exit(EXIT_SUCCESS);
@@ -128,7 +132,7 @@ void validate_project_layout(const fs::path& repo_root) {
     }
 }
 
-void print_success_message(const fs::path& repo_root, const fs::path& venv_path) {
+void print_success_message(const fs::path& repo_root, const fs::path& venv_path, bool launching) {
     fs::path venv = venv_path;
     if (!venv.is_absolute()) {
         venv = repo_root / venv;
@@ -144,6 +148,24 @@ void print_success_message(const fs::path& repo_root, const fs::path& venv_path)
 #else
     std::cout << "  source " << venv.string() << "/bin/activate && streamlit run " << streamlit_entry.string() << '\n';
 #endif
+    if (launching) {
+        std::cout << "Streamlit will now be launched automatically.\n";
+    } else {
+        std::cout << "(Use --launch to start Streamlit automatically after setup.)\n";
+    }
+}
+
+void launch_streamlit(const fs::path& repo_root, const fs::path& venv_path) {
+    fs::path venv = venv_path;
+    if (!venv.is_absolute()) {
+        venv = repo_root / venv;
+    }
+
+    fs::path python = python_in_venv(venv);
+    fs::path streamlit_entry = repo_root / "llm_chatbot" / "app" / "ui_streamlit.py";
+
+    std::cout << "\nLaunching Streamlit using " << python << "...\n";
+    run_command(quote(python) + " -m streamlit run " + quote(streamlit_entry));
 }
 }
 
@@ -153,7 +175,10 @@ int main(int argc, char** argv) {
         const fs::path repo_root = detect_repo_root();
         validate_project_layout(repo_root);
         ensure_virtualenv(opts, repo_root);
-        print_success_message(repo_root, opts.venv_path);
+        print_success_message(repo_root, opts.venv_path, opts.launch_streamlit);
+        if (opts.launch_streamlit) {
+            launch_streamlit(repo_root, opts.venv_path);
+        }
     } catch (const std::exception& ex) {
         std::cerr << "Error: " << ex.what() << '\n';
         std::cerr << "Use --help to see usage instructions." << '\n';
